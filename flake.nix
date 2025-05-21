@@ -21,7 +21,6 @@
         home-manager,
         ...
     } @ inputs: let
-        user = "jon";
         darwinSystems = [ "aarch64-darwin" ];
     in {
         darwinConfigurations = nixpkgs.lib.genAttrs darwinSystems (system:
