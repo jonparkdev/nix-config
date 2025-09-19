@@ -50,6 +50,7 @@ in
             _1password-cli
             _1password-gui
             slack
+            zoom
           ];
         };
 

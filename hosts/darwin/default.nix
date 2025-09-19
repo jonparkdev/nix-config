@@ -54,6 +54,7 @@ in
         "1password-cli"
         "1password-gui"
         "slack"
+        "zoom-us"
       ];
   };
   environment.systemPackages = with pkgs; [
