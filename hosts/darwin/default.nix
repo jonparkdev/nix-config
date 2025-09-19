@@ -53,6 +53,7 @@ in
         "1password"
         "1password-cli"
         "1password-gui"
+        "slack"
       ];
   };
   environment.systemPackages = with pkgs; [
@@ -151,7 +152,7 @@ in
             app = "/Applications/AWS VPN Client/AWS VPN Client.app/";
           }
           {
-            app = "/Applications/Slack.app/";
+            app = "/Applications/Nix Apps/Slack.app/";
           }
           {
             app = "/Applications/Nix Apps/Firefox.app/";
