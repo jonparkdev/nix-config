@@ -54,7 +54,7 @@ in
         "1password-cli"
         "1password-gui"
         "slack"
-        "zoom-us"
+        "zoom"
       ];
   };
   environment.systemPackages = with pkgs; [
@@ -82,7 +82,7 @@ in
 
   homebrew = {
     enable = true;
-    casks = [ "aws-vpn-client" ];
+    casks = [ "aws-vpn-client" "mullvad-vpn" ];
 
     # These app IDs are from using the mas CLI app
     # mas = mac app store
