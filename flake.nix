@@ -1,9 +1,10 @@
 {
-  description = "Jon's NixOS Configuration";
+  description = "Jon's Nix Configurations (MacOS)";
 
   inputs = {
     # Official NixOS package source, using nixos's unstable branch by default
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-25.05-darwin";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -49,23 +50,19 @@
     }@inputs:
     let
       user = "jonpark";
-      linuxSystems = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
-      darwinSystems = [
+      
+      # List of all architectures I currently manage  
+      mySystems = [
         "aarch64-darwin"
-        "x86_64-darwin"
       ];
-
+    
       # This is a function that generates an attribute by calling a function you
       # pass to it, with each system as an argument
-      forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
+      forAllSystems = f: nixpkgs.lib.genAttrs (mySystems) f;
 
     in
     {
-
-      darwinConfigurations = nixpkgs.lib.genAttrs darwinSystems (
+      darwinConfigurations = nixpkgs.lib.genAttrs mySystems (
         system:
         darwin.lib.darwinSystem {
           inherit system;
@@ -79,6 +76,7 @@
               nix-homebrew = {
                 inherit user;
                 enable = true;
+                enableRosetta = true;
                 taps = {
                   "homebrew/homebrew-core" = homebrew-core;
                   "homebrew/homebrew-cask" = homebrew-cask;

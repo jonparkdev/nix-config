@@ -17,6 +17,7 @@ in
     package = pkgs.nix;
 
     settings = {
+      download-buffer-size = 500000000;
       trusted-users = [
         "@admin"
         "${user}"
@@ -42,31 +43,30 @@ in
       experimental-features = nix-command flakes
     '';
   };
-
   nixpkgs = {
     config.allowUnfreePredicate =
       pkg:
       builtins.elem (lib.getName pkg) [
         # Add additional package names here
         "vscode"
-        "warp-terminal"
-        "1password"
-        "1password-cli"
-        "1password-gui"
         "slack"
         "zoom"
       ];
   };
+
+  security.pam.services.sudo_local.touchIdAuth = true;
+
   environment.systemPackages = with pkgs; [
     # Nix related packages
     nixfmt-rfc-style
 
     gnupg
 
+    brave
+
     vim
-    firefox
     vscode
-    warp-terminal
+    ghostty-bin
 
     # Cloud-related tools and SDKs
     docker
@@ -82,7 +82,7 @@ in
 
   homebrew = {
     enable = true;
-    casks = [ "aws-vpn-client" "mullvad-vpn" ];
+    casks = [ "aws-vpn-client" "mullvad-vpn" "1password" "1password-cli" ];
 
     # These app IDs are from using the mas CLI app
     # mas = mac app store
@@ -144,7 +144,7 @@ in
             app = "System/Applications/Apps.app/";
           }
           {
-            app = "/Applications/Nix Apps/Warp.app/";
+            app = "/Applications/Nix Apps/ghostty.app/";
           }
           {
             app = "/Applications/Nix Apps/Visual Studio Code.app/";
@@ -156,10 +156,10 @@ in
             app = "/Applications/Nix Apps/Slack.app/";
           }
           {
-            app = "/Applications/Nix Apps/Firefox.app/";
+            app = "/Applications/Nix Apps/Brave Browser.app/";
           }
           {
-            app = "/Applications/Nix Apps/1password.app/";
+            app = "/Applications/1password.app/";
           }
           {
             app = "System/Applications/System Settings.app/";

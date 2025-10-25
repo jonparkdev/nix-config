@@ -47,8 +47,6 @@ in
           # Packages are not automatically symlink'd to MacOS ~/Applications directory
           # For details see: https://github.com/nix-community/home-manager/issues/1341#issuecomment-3256894180
           packages = with pkgs; [
-            _1password-cli
-            _1password-gui
             slack
             zoom-us
           ];
@@ -62,6 +60,11 @@ in
 
         # Enable home-manager and git
         programs.home-manager.enable = true;
+     
+        # programs.firefox.enable = true;
+        # programs.firefox.package = (pkgs.wrapFirefox.override {
+        #  libcanberra-gtk3 = pkgs.libcanberra-gtk2;
+        # }) pkgs.firefox-unwrapped { };
 
         programs = {
           ssh = {
@@ -86,7 +89,7 @@ in
 
             extraConfig = {
               gpg.format = "ssh";
-              gpg.ssh.program = "${pkgs._1password-gui}/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+              gpg.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
               init.defaultBranch = "main";
               core = {
                 editor = "vim";
