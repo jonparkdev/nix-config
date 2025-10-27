@@ -63,7 +63,6 @@ in
     gnupg
 
     vim
-    vscode
     ghostty-bin
 
     # Cloud-related tools and SDKs
@@ -73,19 +72,18 @@ in
     kustomize
     kubernetes-helm
     awscli2
-    granted
     opentofu
     tenv
+    k9s
   ];
 
   homebrew = {
     enable = true;
     casks = [ 
       "aws-vpn-client" 
-      "mullvad-vpn" 
       "1password" 
       "1password-cli" 
-      "firefox" 
+      "firefox"
     ];
 
     # These app IDs are from using the mas CLI app
