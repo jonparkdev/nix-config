@@ -62,8 +62,6 @@ in
 
     gnupg
 
-    brave
-
     vim
     vscode
     ghostty-bin
@@ -82,7 +80,13 @@ in
 
   homebrew = {
     enable = true;
-    casks = [ "aws-vpn-client" "mullvad-vpn" "1password" "1password-cli" ];
+    casks = [ 
+      "aws-vpn-client" 
+      "mullvad-vpn" 
+      "1password" 
+      "1password-cli" 
+      "firefox" 
+    ];
 
     # These app IDs are from using the mas CLI app
     # mas = mac app store
@@ -156,7 +160,7 @@ in
             app = "/Applications/Nix Apps/Slack.app/";
           }
           {
-            app = "/Applications/Nix Apps/Brave Browser.app/";
+            app = "/Applications/Firefox.app/";
           }
           {
             app = "/Applications/1password.app/";
