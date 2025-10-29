@@ -72,7 +72,6 @@ in
     kustomize
     kubernetes-helm
     awscli2
-    opentofu
     tenv
     k9s
   ];
