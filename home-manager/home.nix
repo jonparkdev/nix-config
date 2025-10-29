@@ -106,6 +106,9 @@ in
                 variable = "STARSHIP_DISTRO";
                 disabled = false;
               };
+              kubernetes = {
+                disabled = false;
+              };
             };
           };
 
