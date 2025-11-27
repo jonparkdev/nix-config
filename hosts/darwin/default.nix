@@ -43,6 +43,7 @@ in
       experimental-features = nix-command flakes
     '';
   };
+  
   nixpkgs = {
     config.allowUnfreePredicate =
       pkg:
@@ -64,8 +65,12 @@ in
 
     vim
     ghostty-bin
+    slack
+    zoom-us
+    nerd-fonts.jetbrains-mono
 
     # Cloud-related tools and SDKs
+    colima
     docker
     docker-compose
     kubectl
@@ -102,17 +107,6 @@ in
   };
 
   system = {
-    # Fore details see: https://github.com/nix-community/home-manager/issues/1341#issuecomment-3256894180
-    build.applications = lib.mkForce (
-      pkgs.buildEnv {
-        name = "system-applications";
-        pathsToLink = "/Applications";
-        paths =
-          config.environment.systemPackages
-          ++ (lib.concatMap (x: x.home.packages) (lib.attrsets.attrValues config.home-manager.users));
-      }
-    );
-    
     checks.verifyNixPath = false;
     primaryUser = user;
     stateVersion = 6;
@@ -145,16 +139,16 @@ in
             app = "System/Applications/Apps.app/";
           }
           {
-            app = "/Applications/Nix Apps/ghostty.app/";
+            app = "${pkgs.ghostty-bin}/Applications/ghostty.app/";
           }
           {
-            app = "/Applications/Nix Apps/Visual Studio Code.app/";
+            app = "${pkgs.vscode}/Applications/Visual Studio Code.app";
           }
           {
             app = "/Applications/AWS VPN Client/AWS VPN Client.app/";
           }
           {
-            app = "/Applications/Nix Apps/Slack.app/";
+            app = "${pkgs.slack}/Applications/Slack.app";
           }
           {
             app = "/Applications/Firefox.app/";

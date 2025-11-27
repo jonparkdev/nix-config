@@ -46,11 +46,7 @@ in
 
           # Packages are not automatically symlink'd to MacOS ~/Applications directory
           # For details see: https://github.com/nix-community/home-manager/issues/1341#issuecomment-3256894180
-          packages = with pkgs; [
-            slack
-            zoom-us
-            pkgs.nerd-fonts.jetbrains-mono
-          ];
+          packages = with pkgs; [];
         };
 
         manual.manpages.enable = false;
