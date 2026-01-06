@@ -52,6 +52,7 @@ in
         "vscode"
         "slack"
         "zoom"
+        "claude-code"
       ];
   };
 
@@ -68,6 +69,7 @@ in
     slack
     zoom-us
     nerd-fonts.jetbrains-mono
+    claude-code
 
     # Cloud-related tools and SDKs
     colima
