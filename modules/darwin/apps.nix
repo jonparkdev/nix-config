@@ -32,5 +32,6 @@
 
     # AI/CLI tools
     claude-code
+    gemini-cli
   ];
 }

@@ -1,18 +1,15 @@
 {
   ...
 }:
-let
-  name = "Jonathan Park";
-  email = "accounts@jonpark.dev";
-in
 {
   programs.git = {
     enable = true;
 
-    userName = name;
-    userEmail = email;
-
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Jonathan Park";
+        email = "accounts@jonpark.dev";
+      };
       gpg.format = "ssh";
       gpg.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       init.defaultBranch = "main";
