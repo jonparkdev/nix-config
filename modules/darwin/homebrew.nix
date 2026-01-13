@@ -5,11 +5,12 @@
   homebrew = {
     enable = true;
 
-    # Shared casks - available on all Darwin hosts
     casks = [
       "1password"
       "1password-cli"
       "firefox"
+      "aws-vpn-client"
+      "protonvpn"
     ];
 
     # Mac App Store apps (requires mas CLI)

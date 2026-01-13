@@ -51,8 +51,7 @@
 
       # Darwin hosts configuration
       darwinHosts = {
-        personal = { system = "aarch64-darwin"; };
-        fortis = { system = "aarch64-darwin"; };
+        macbook = { system = "aarch64-darwin"; };
       };
 
       # NixOS hosts configuration (for future use)

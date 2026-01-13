@@ -12,7 +12,9 @@
     configurationRevision = self.rev or self.dirtyRev or null;
 
     activationScripts.extraActivation.text = ''
-      softwareupdate --install-rosetta --agree-to-license
+      if ! /usr/bin/pgrep -q oahd; then
+        softwareupdate --install-rosetta --agree-to-license
+      fi
     '';
 
     defaults = {
