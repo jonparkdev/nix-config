@@ -1,5 +1,4 @@
 {
-  lib,
   pkgs,
   user,
   ...
@@ -12,7 +11,7 @@
       download-buffer-size = 500000000;
       trusted-users = [
         "@admin"
-        "${user}"
+        user
       ];
       substituters = [
         "https://nix-community.cachix.org"
@@ -36,14 +35,5 @@
     '';
   };
 
-  nixpkgs = {
-    config.allowUnfreePredicate =
-      pkg:
-      builtins.elem (lib.getName pkg) [
-        "vscode"
-        "slack"
-        "zoom"
-        "claude-code"
-      ];
-  };
+  nixpkgs.config.allowUnfree = true;
 }
