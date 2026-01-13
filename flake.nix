@@ -1,10 +1,8 @@
 {
-  description = "Jon's Nix Configurations (MacOS)";
+  description = "Jon's Nix Configurations";
 
   inputs = {
-    # Official NixOS package source, using nixos's unstable branch by default
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-25.05-darwin";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -50,24 +48,24 @@
     }@inputs:
     let
       user = "jonpark";
-      
-      # List of all architectures I currently manage  
-      mySystems = [
-        "aarch64-darwin"
-      ];
-    
-      # This is a function that generates an attribute by calling a function you
-      # pass to it, with each system as an argument
-      forAllSystems = f: nixpkgs.lib.genAttrs (mySystems) f;
 
-    in
-    {
-      darwinConfigurations = nixpkgs.lib.genAttrs mySystems (
-        system:
+      # Darwin hosts configuration
+      darwinHosts = {
+        personal = { system = "aarch64-darwin"; };
+        fortis = { system = "aarch64-darwin"; };
+      };
+
+      # NixOS hosts configuration (for future use)
+      nixosHosts = {
+        # homelab = { system = "x86_64-linux"; };
+      };
+
+      # Helper function to create Darwin configurations
+      mkDarwinConfig = hostname: { system }:
         darwin.lib.darwinSystem {
           inherit system;
           specialArgs = inputs // {
-            inherit user;
+            inherit user hostname;
           };
           modules = [
             home-manager.darwinModules.home-manager
@@ -86,9 +84,29 @@
                 autoMigrate = true;
               };
             }
-            ./hosts/darwin
+            ./hosts/darwin/${hostname}
           ];
-        }
-      );
+        };
+
+      # Helper function to create NixOS configurations (for future use)
+      mkNixosConfig = hostname: { system }:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = inputs // {
+            inherit user hostname;
+          };
+          modules = [
+            home-manager.nixosModules.home-manager
+            ./hosts/nixos/${hostname}
+          ];
+        };
+
+    in
+    {
+      # Generate Darwin configurations for all Darwin hosts
+      darwinConfigurations = builtins.mapAttrs mkDarwinConfig darwinHosts;
+
+      # Generate NixOS configurations for all NixOS hosts (empty for now)
+      nixosConfigurations = builtins.mapAttrs mkNixosConfig nixosHosts;
     };
 }

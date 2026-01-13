@@ -1,6 +1,23 @@
-# Jon's Nix Configuration
+# My Nix Configuration (MacOS + NixOS\[coming soon\])
 
-My personal macOS system configuration, managed declaratively with Nix. I'm learning Nix as I go, and this repo represents my journey toward a fully reproducible development environment. If you're exploring Nix for the first time, you're in good company.
+Welcome to my Nix configuration!
+
+I use Nix to manage my not so many systems.  Just my personal and work MacBooks but, Coming Soon, configuration for my 
+For those who are uninitiated. 
+
+ What does that mean? I can build and rebuild my machine from scratch as much as I want.  You'll find currently that I only manage a MacOS configuration but eventually plan to dabble in NixOS for my homelab machines. Coming Soon! 
+
+I am currently learning Nix and it's no joke that there is a steap learning curve. With that said this repo represent my Nix journey and through my exploration I hope, the content can become something og value can add value in some becomes something that someone can reference. I will try my best to document my journey
+What you will find in this repo is the declarative configuration for managing my many(just my MacOS hosts so far) machines
+
+## Why Nix?
+
+I originally managed my system configuration using the typical (bash powered dotfiles)[] Nix was introduced to me my a colleague at work. 
+
+## Community
+
+A
+
 
 ## What This Is
 
