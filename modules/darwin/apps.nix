@@ -19,6 +19,10 @@
     slack
     zoom-us
 
+    # Productivity
+    obsidian
+    zed-editor
+
     # Cloud & DevOps tools
     colima
     docker

@@ -5,11 +5,14 @@
   homebrew = {
     enable = true;
 
+    onActivation.cleanup = "zap";
+
     casks = [
       "1password"
       "1password-cli"
-      "firefox"
       "aws-vpn-client"
+      "firefox"
+      "hammerspoon"
       "protonvpn"
     ];
 

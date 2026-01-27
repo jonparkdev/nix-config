@@ -23,6 +23,7 @@
         ./git.nix
         ./ssh.nix
         ./dev.nix
+        ./hammerspoon.nix
       ];
 
       home.stateVersion = "25.05";
