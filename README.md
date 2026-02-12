@@ -1,241 +1,102 @@
-# My Nix Configuration (MacOS + NixOS\[coming soon\])
+<h2 align="center">My Nix Configuration (macOS + NixOS [coming soon])</h2>
 
-Welcome to my Nix configuration!
+<p align="center">
+  <a href="https://lix.systems/">
+    <img alt="Lix" src="https://img.shields.io/badge/Lix-Nix-informational?style=for-the-badge&logo=nixos&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41" />
+  </a>
+  <a href="https://github.com/LnL7/nix-darwin">
+    <img alt="nix-darwin" src="https://img.shields.io/badge/nix--darwin-macOS-informational?style=for-the-badge&logo=apple&color=B5E8E0&logoColor=D9E0EE&labelColor=302D41" />
+  </a>
+</p>
 
-I use Nix to manage my not so many systems.  Just my personal and work MacBooks but, Coming Soon, configuration for my 
-For those who are uninitiated. 
+<p align="center">Welcome to my Nix configuration!</p>
 
- What does that mean? I can build and rebuild my machine from scratch as much as I want.  You'll find currently that I only manage a MacOS configuration but eventually plan to dabble in NixOS for my homelab machines. Coming Soon! 
+## How I Work
 
-I am currently learning Nix and it's no joke that there is a steap learning curve. With that said this repo represent my Nix journey and through my exploration I hope, the content can become something og value can add value in some becomes something that someone can reference. I will try my best to document my journey
-What you will find in this repo is the declarative configuration for managing my many(just my MacOS hosts so far) machines
+My daily driver is a MacBook Pro running macOS with [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager) managing the entire system declaratively. I use [Lix](https://lix.systems/) as my Nix implementation, though nothing here is Lix-specific — standard Nix works fine.
 
-## Why Nix?
+My work is mostly cloud-native — Kubernetes, AWS, Terraform — so the tooling reflects that.
 
-I originally managed my system configuration using the typical (bash powered dotfiles)[] Nix was introduced to me my a colleague at work. 
+For package management, CLI tools come from Nix and GUI apps that need proper macOS integration (1Password, Firefox, VPN clients) come from Homebrew via [nix-homebrew](https://github.com/zhaofengli-wip/nix-homebrew). The line is simple: if it lives in your terminal, Nix manages it. If it lives in your Dock, Homebrew probably does.
 
-## Community
+I'm still learning Nix — the learning curve is no joke. This repo is a record of that journey. As I get more comfortable, I hope it becomes something others can reference. If nothing else, reading other people's configs was the single most useful thing when I was starting out, so maybe this one helps someone too.
 
-A
+> This is my personal configuration. If you run it as-is, you'll get *my* machine. Fork it and make it yours, or just use it as a reference.
 
+## What's In Here
 
-## What This Is
+- **System packages**: Docker, kubectl, helm, k9s, AWS CLI, tenv, vim, and more
+- **Homebrew casks**: 1Password, Firefox, AWS VPN Client, ProtonVPN
+- **Shell**: Zsh with Starship prompt, distro-aware icons, kube context display
+- **Git**: Commit signing via 1Password SSH agent, LFS, rebase-on-pull
+- **macOS preferences**: Touch ID for sudo, keyboard repeat tuning, three-finger drag, Dock layout
+- **Dev tools**: VS Code with JetBrains Mono Nerd Font, AWS Granted for role switching
 
-This repository uses **Nix Flakes** and **nix-darwin** to define my entire macOS development environment as code. Everything from installed packages to system preferences to shell configurations lives here, version-controlled and reproducible.
+## Structure
 
-Why Nix? I wanted a system where I could:
-- Rebuild my machine from scratch in minutes, not hours
-- Track every change to my development environment in Git
-- Share configurations across machines (when I get there)
-- Actually understand what's installed and why
+```
+.
+├── flake.nix                      # Entry point — inputs, helper functions, host definitions
+├── hosts/
+│   └── darwin/
+│       └── macbook/
+│           └── default.nix        # Host-specific config (hostname, user, dock apps)
+├── modules/
+│   ├── shared/
+│   │   ├── default.nix
+│   │   └── nix-core.nix          # Nix daemon, garbage collection, experimental features
+│   ├── darwin/
+│   │   ├── default.nix
+│   │   ├── apps.nix              # System packages (Nix)
+│   │   ├── homebrew.nix          # GUI apps (Homebrew casks)
+│   │   └── system.nix            # macOS system preferences
+│   └── nixos/
+│       └── default.nix           # Placeholder for future NixOS hosts
+└── home/
+    ├── default.nix
+    ├── shell.nix                  # Zsh, Starship
+    ├── git.nix                    # Git config, 1Password signing
+    ├── ssh.nix                    # 1Password SSH agent
+    └── dev.nix                    # VS Code, Granted
+```
 
-This setup is optimized for cloud-native development work with Kubernetes, AWS, and Docker, plus the usual suspects for a modern development workflow.
+The architecture is layered: `flake.nix` defines helper functions (`mkDarwinConfig`, `mkNixosConfig`) that wire together host-specific config, shared modules, platform modules, and home-manager. Adding a new host means creating a directory under `hosts/` and calling the appropriate helper in `flake.nix`.
 
-## Quick Start
+## Getting Started
 
-### Prerequisites
+### Install Nix
 
-Install Nix with flakes enabled:
+With [Lix](https://lix.systems/) (what I use):
+```bash
+curl -sSf -L https://install.lix.systems/lix | sh -s -- install
+```
+
+Or standard Nix:
 ```bash
 sh <(curl -L https://nixos.org/nix/install)
 ```
 
-### Initial Setup
+### Build
 
-Clone this repo and run the initial build:
 ```bash
-git clone https://github.com/jonpark/nix-config.git ~/nix-config
+git clone https://github.com/jonparkdev/nix-config.git ~/nix-config
 cd ~/nix-config
 nix run nix-darwin -- switch --flake .
 ```
 
-### Daily Commands
-
-**Rebuild system after making changes:**
+After the initial build, rebuild with:
 ```bash
 darwin-rebuild switch --flake ~/nix-config
 ```
 
-**Update all packages:**
-```bash
-cd ~/nix-config
-nix flake update
-darwin-rebuild switch --flake .
-```
+## References
 
-**Garbage collect old generations (free up space):**
-```bash
-nix-collect-garbage -d
-```
+Configs I've learned from:
 
-**See what's installed:**
-```bash
-nix profile list
-```
-
-## What's Inside
-
-### Development Tools
-- **Containers & Orchestration:** Docker, kubectl, helm, k9s
-- **Cloud & IaC:** AWS CLI, Terraform (via tenv), AWS IAM Granted
-- **Editor:** VS Code with JetBrains Mono Nerd Font
-- **Terminal:** Ghostty with Starship prompt (shows Kubernetes context)
-- **Version Control:** Git with LFS support
-
-### System Configuration
-- **Package Management:** Nix + Homebrew integration for Mac-native apps
-- **Security:** 1Password integration for SSH keys and Git signing
-- **macOS Preferences:** Dock layout, keyboard settings (key repeat = 2), trackpad with three-finger drag, Touch ID for sudo
-
-### Applications
-- **Communication:** Slack, Zoom
-- **Security:** 1Password, 1Password CLI
-- **Browsers:** Firefox
-- **VPN:** AWS VPN Client
-- **AI Tools:** claude-code
-
-### Shell Environment
-- **Shell:** Zsh with custom initialization
-- **Prompt:** Starship with Kubernetes metadata display
-- **SSH:** Integrated with 1Password agent for key management
-
-## Structure Overview
-
-```
-nix-config/
-├── flake.nix                 # Main entry point - defines inputs/outputs
-├── flake.lock                # Locked dependency versions for reproducibility
-├── hosts/
-│   └── darwin/
-│       └── default.nix       # macOS system configuration (packages, settings)
-└── home-manager/
-    └── home.nix              # User environment (git, shell, dotfiles)
-```
-
-### Key Files Explained
-
-**`flake.nix`**
-The heart of the configuration. Declares dependencies (nixpkgs, nix-darwin, home-manager) and defines your system outputs. This is where everything comes together.
-
-**`hosts/darwin/default.nix`**
-System-level configuration for macOS. This is where you:
-- Install system packages
-- Configure Homebrew apps
-- Set macOS preferences (Dock, keyboard, trackpad, etc.)
-- Configure Nix daemon settings
-
-**`home-manager/home.nix`**
-User-level configuration. This manages:
-- Git configuration
-- Shell setup (Zsh, Starship)
-- SSH configuration
-- Dotfiles and user-specific settings
-
-## Useful Commands & Tips
-
-### Adding a New Package
-
-**Add to system (available to all users):**
-Edit `hosts/darwin/default.nix` and add to `environment.systemPackages`:
-```nix
-environment.systemPackages = with pkgs; [
-  # ... existing packages
-  your-new-package
-];
-```
-
-**Add to user environment:**
-Edit `home-manager/home.nix` and add to `home.packages`:
-```nix
-home.packages = with pkgs; [
-  # ... existing packages
-  your-new-package
-];
-```
-
-Then rebuild:
-```bash
-darwin-rebuild switch --flake ~/nix-config
-```
-
-### Searching for Packages
-
-```bash
-# Search nixpkgs
-nix search nixpkgs <package-name>
-
-# Example: search for postgres
-nix search nixpkgs postgres
-```
-
-### Rolling Back Changes
-
-If something breaks after a rebuild:
-```bash
-# List previous generations
-darwin-rebuild --list-generations
-
-# Roll back to previous generation
-darwin-rebuild --rollback
-
-# Or switch to specific generation
-darwin-rebuild switch --flake . --switch-generation <number>
-```
-
-### Managing Homebrew Apps
-
-Add Mac-native apps in `hosts/darwin/default.nix` under `homebrew.casks`:
-```nix
-homebrew.casks = [
-  "1password"
-  "firefox"
-  # Add your app here
-];
-```
-
-### Checking for Updates
-
-```bash
-# Update flake inputs to latest versions
-nix flake update
-
-# See what changed
-git diff flake.lock
-```
-
-## Customization
-
-This is my personal configuration, but it's designed to be forkable. Here's how to make it yours:
-
-1. **Personal Info:** Update git config in `home-manager/home.nix`
-2. **Packages:** Add/remove from the packages lists in both files
-3. **macOS Settings:** Tweak `system.defaults` in `hosts/darwin/default.nix`
-4. **Shell:** Customize Zsh and Starship in `home-manager/home.nix`
-5. **Dock:** Modify `system.dock` settings to match your workflow
-
-The beauty of Nix is that you can experiment freely - if something breaks, just roll back.
-
-## Resources & Learning
-
-I'm learning Nix as I build this. Here are resources that have helped me:
-
-- [Nix Darwin Documentation](https://daiderd.com/nix-darwin/)
-- [Home Manager Manual](https://nix-community.github.io/home-manager/)
-- [Nix Flakes Wiki](https://nixos.wiki/wiki/Flakes)
-- [Zero to Nix](https://zero-to-nix.com/) - Great intro to Nix concepts
-- [MyNixOS](https://mynixos.com/) - Search nix-darwin and home-manager options
-- [Nix Package Search](https://search.nixos.org/packages) - Find packages
-
-### Helpful Community Configs
-
-Looking at others' configs has been invaluable:
 - [dustinlyons/nixos-config](https://github.com/dustinlyons/nixos-config)
-- [mathiasbynens/dotfiles](https://github.com/mathiasbynens/dotfiles) - Great for macOS defaults
+- [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config)
+- [mitchellh/nixos-config](https://github.com/mitchellh/nixos-config)
 
 ## License
 
-MIT - Feel free to fork and adapt this for your own use.
-
----
-
-*Still learning, still tinkering. If you spot something that could be better, I'm all ears.*
+MIT
