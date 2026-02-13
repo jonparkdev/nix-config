@@ -5,11 +5,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build Commands
 
 ```bash
-# Rebuild system after changes (primary workflow)
-darwin-rebuild switch --flake ~/nix-config
+# Rebuild system after changes (primary workflow, requires sudo)
+sudo darwin-rebuild switch --flake ~/nix-config
 
 # Initial setup (first time only)
-nix run nix-darwin -- switch --flake .
+sudo nix run nix-darwin -- switch --flake .
 
 # Update all flake inputs
 nix flake update

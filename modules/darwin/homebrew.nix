@@ -16,6 +16,7 @@
       "hammerspoon"
       "protonvpn"
       "codex"
+      "codex-app"
     ];
 
     # Mac App Store apps (requires mas CLI)

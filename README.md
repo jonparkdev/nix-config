@@ -25,8 +25,8 @@ I'm still learning Nix — the learning curve is no joke. This repo is a record 
 
 ## What's In Here
 
-- **System packages**: Docker, kubectl, helm, k9s, AWS CLI, tenv, vim, and more
-- **Homebrew casks**: 1Password, Firefox, AWS VPN Client, ProtonVPN
+- **System packages**: Docker, kubectl, helm, k9s, AWS CLI, tenv, vim, Obsidian, Zed, and more
+- **Homebrew casks**: 1Password, Firefox, Claude, Codex, Hammerspoon, AWS VPN Client, ProtonVPN
 - **Shell**: Zsh with Starship prompt, distro-aware icons, kube context display
 - **Git**: Commit signing via 1Password SSH agent, LFS, rebase-on-pull
 - **macOS preferences**: Touch ID for sudo, keyboard repeat tuning, three-finger drag, Dock layout
@@ -57,7 +57,8 @@ I'm still learning Nix — the learning curve is no joke. This repo is a record 
     ├── shell.nix                  # Zsh, Starship
     ├── git.nix                    # Git config, 1Password signing
     ├── ssh.nix                    # 1Password SSH agent
-    └── dev.nix                    # VS Code, Granted
+    ├── dev.nix                    # VS Code, Granted
+    └── hammerspoon.nix            # Window management hotkeys
 ```
 
 The architecture is layered: `flake.nix` defines helper functions (`mkDarwinConfig`, `mkNixosConfig`) that wire together host-specific config, shared modules, platform modules, and home-manager. Adding a new host means creating a directory under `hosts/` and calling the appropriate helper in `flake.nix`.
@@ -81,12 +82,12 @@ sh <(curl -L https://nixos.org/nix/install)
 ```bash
 git clone https://github.com/jonparkdev/nix-config.git ~/nix-config
 cd ~/nix-config
-nix run nix-darwin -- switch --flake .
+sudo nix run nix-darwin -- switch --flake .
 ```
 
 After the initial build, rebuild with:
 ```bash
-darwin-rebuild switch --flake ~/nix-config
+sudo darwin-rebuild switch --flake ~/nix-config
 ```
 
 ## References
