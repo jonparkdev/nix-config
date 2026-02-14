@@ -87,7 +87,7 @@ sudo nix run nix-darwin -- switch --flake .
 
 After the initial build, rebuild with:
 ```bash
-sudo darwin-rebuild switch --flake ~/nix-config
+sudo darwin-rebuild switch --flake .#macbook
 ```
 
 ## References

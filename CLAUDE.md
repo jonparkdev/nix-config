@@ -2,11 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+**Always read `RUNBOOK.md` at the start of a session.** It contains operational knowledge: how the linux-builder works, debugging steps, and common gotchas.
+
 ## Build Commands
 
 ```bash
 # Rebuild system after changes (primary workflow, requires sudo)
-sudo darwin-rebuild switch --flake ~/nix-config
+sudo darwin-rebuild switch --flake .#macbook
 
 # Initial setup (first time only)
 sudo nix run nix-darwin -- switch --flake .
