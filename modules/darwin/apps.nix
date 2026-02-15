@@ -10,6 +10,7 @@
     # Core utilities
     vim
     gnupg
+    bat
 
     # Terminal & fonts
     ghostty-bin

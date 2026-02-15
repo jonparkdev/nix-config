@@ -7,6 +7,14 @@
 
     onActivation.cleanup = "zap";
 
+    taps = [
+      "homebrew/cask"
+    ];
+
+    brews = [
+      "beads"
+    ];
+
     casks = [
       "1password"
       "1password-cli"
