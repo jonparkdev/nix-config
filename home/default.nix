@@ -1,7 +1,14 @@
 {
+  lib,
   user,
+  hostname,
+  homeProfiles ? [ ],
   ...
 }:
+let
+  profileModule = profile: ./profiles + "/${profile}.nix";
+  hostModule = ./hosts + "/${hostname}.nix";
+in
 {
   users.users.${user} = {
     name = user;
@@ -19,11 +26,13 @@
 
     users.${user} = {
       imports = [
-        ./shell.nix
-        ./git.nix
-        ./ssh.nix
-        ./dev.nix
-        ./hammerspoon.nix
+        ./base/shell.nix
+        ./base/git.nix
+        ./base/ssh.nix
+      ]
+      ++ builtins.map profileModule homeProfiles
+      ++ lib.optionals (builtins.pathExists hostModule) [
+        hostModule
       ];
 
       home.stateVersion = "25.05";

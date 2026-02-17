@@ -51,7 +51,24 @@
 
       # Darwin hosts configuration
       darwinHosts = {
-        macbook = { system = "aarch64-darwin"; };
+        personal-macbook = {
+          system = "aarch64-darwin";
+          role = "personal";
+          homeProfiles = [
+            "laptop"
+            "server-admin"
+          ];
+          enableLinuxBuilder = true;
+        };
+        work-macbook = {
+          system = "aarch64-darwin";
+          role = "work";
+          homeProfiles = [
+            "laptop"
+            "work"
+          ];
+          enableLinuxBuilder = false;
+        };
       };
 
       # NixOS hosts configuration (for future use)
@@ -60,11 +77,24 @@
       };
 
       # Helper function to create Darwin configurations
-      mkDarwinConfig = hostname: { system }:
+      mkDarwinConfig =
+        hostname:
+        {
+          system,
+          role,
+          homeProfiles,
+          enableLinuxBuilder,
+        }:
         darwin.lib.darwinSystem {
           inherit system;
           specialArgs = inputs // {
-            inherit user hostname;
+            inherit
+              user
+              hostname
+              role
+              homeProfiles
+              enableLinuxBuilder
+              ;
           };
           modules = [
             home-manager.darwinModules.home-manager

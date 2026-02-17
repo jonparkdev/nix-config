@@ -5,7 +5,7 @@
 {
   environment.systemPackages = with pkgs; [
     # Nix tools
-    nixfmt-rfc-style
+    nixfmt
 
     # Core utilities
     vim
@@ -16,24 +16,8 @@
     ghostty-bin
     nerd-fonts.jetbrains-mono
 
-    # Communication
-    slack
-    zoom-us
-
-    # Productivity
-    obsidian
-    zed-editor
-
-    # Cloud & DevOps tools
-    colima
-    docker
-    docker-compose
-    kubectl
-    kustomize
-    kubernetes-helm
-    awscli2
-    tenv
-    k9s
+    # Core dev tools
+    gh
 
     # AI/CLI tools
     claude-code

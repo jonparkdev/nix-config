@@ -39,29 +39,64 @@ I'm still learning Nix — the learning curve is no joke. This repo is a record 
 ├── flake.nix                      # Entry point — inputs, helper functions, host definitions
 ├── hosts/
 │   └── darwin/
-│       └── macbook/
-│           └── default.nix        # Host-specific config (hostname, user, dock apps)
+│       ├── personal-macbook/
+│       │   └── default.nix        # Personal host identity (hostname, user)
+│       └── work-macbook/
+│           └── default.nix        # Work host identity (hostname, user)
 ├── modules/
 │   ├── shared/
 │   │   ├── default.nix
 │   │   └── nix-core.nix          # Nix daemon, garbage collection, experimental features
 │   ├── darwin/
 │   │   ├── default.nix
-│   │   ├── apps.nix              # System packages (Nix)
-│   │   ├── homebrew.nix          # GUI apps (Homebrew casks)
-│   │   └── system.nix            # macOS system preferences
+│   │   ├── apps.nix              # Shared system packages (Nix)
+│   │   ├── homebrew.nix          # Shared Homebrew config and common casks
+│   │   ├── system.nix            # macOS system preferences
+│   │   ├── dock/common.nix       # Shared Dock layout
+│   │   └── roles/
+│   │       ├── personal.nix      # Personal-only packages/casks
+│   │       └── work.nix          # Work-only packages/casks
 │   └── nixos/
 │       └── default.nix           # Placeholder for future NixOS hosts
 └── home/
     ├── default.nix
-    ├── shell.nix                  # Zsh, Starship
-    ├── git.nix                    # Git config, 1Password signing
-    ├── ssh.nix                    # 1Password SSH agent
-    ├── dev.nix                    # VS Code, Granted
-    └── hammerspoon.nix            # Window management hotkeys
+    ├── base/
+    │   ├── shell.nix              # Zsh, Starship
+    │   ├── git.nix                # Git config, 1Password signing
+    │   └── ssh.nix                # 1Password SSH agent
+    ├── features/
+    │   ├── dev.nix                # VS Code, Granted
+    │   └── hammerspoon.nix        # Window management hotkeys
+    ├── profiles/
+    │   ├── laptop.nix
+    │   ├── work.nix
+    │   └── server-admin.nix
+    └── hosts/
+        └── personal-macbook.nix   # Host-only home-manager override
 ```
 
-The architecture is layered: `flake.nix` defines helper functions (`mkDarwinConfig`, `mkNixosConfig`) that wire together host-specific config, shared modules, platform modules, and home-manager. Adding a new host means creating a directory under `hosts/` and calling the appropriate helper in `flake.nix`.
+The architecture is layered: `flake.nix` defines helper functions (`mkDarwinConfig`, `mkNixosConfig`) that wire together host identity, shared modules, role modules, and home-manager. Adding a new host means creating a directory under `hosts/` and adding host metadata (system/role/flags) in `flake.nix`.
+
+## Host Model
+
+This config uses a 3-layer model for host management:
+
+- **Host**: machine identity (`hostname`, `system`, primary user)
+- **Role**: default package/profile grouping (for example `personal` vs `work`)
+- **Home profiles**: reusable user-level bundles selected per host
+- **Feature flags**: optional system capabilities toggled per host
+
+Why this split:
+
+- Hostnames can change; behavior should not depend on string comparisons.
+- Roles capture broad system defaults you want to reuse across similar machines.
+- Home profiles let one user setup span many machines without copy/paste.
+- Flags let you opt in to system behavior without creating a new role.
+
+Current examples:
+
+- `personal-macbook`: `role = "personal"`, `homeProfiles = ["laptop" "server-admin"]`, `enableLinuxBuilder = true`
+- `work-macbook`: `role = "work"`, `homeProfiles = ["laptop" "work"]`, `enableLinuxBuilder = false`
 
 ## Getting Started
 
@@ -87,7 +122,9 @@ sudo nix run nix-darwin -- switch --flake .
 
 After the initial build, rebuild with:
 ```bash
-sudo darwin-rebuild switch --flake .#macbook
+sudo darwin-rebuild switch --flake .#personal-macbook
+# or
+sudo darwin-rebuild switch --flake .#work-macbook
 ```
 
 ## References
