@@ -9,7 +9,7 @@
     ./system.nix
     ./apps.nix
     ./homebrew.nix
-    ./dock/common.nix
+    ./dock.nix
   ] ++ lib.optionals (role == "personal") [
     ./roles/personal.nix
   ] ++ lib.optionals (role == "work") [
