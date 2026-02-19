@@ -69,6 +69,17 @@
         ICON=""
       fi
       export STARSHIP_DISTRO="$ICON"
+
+      # Yazi shell wrapper - allows changing directory on exit
+      function y() {
+        local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+        command yazi "''$@" --cwd-file="''$tmp"
+        IFS= read -r -d "" cwd < "''$tmp"
+        if [[ -n "''$cwd" ]] && [[ "''$cwd" != "''$PWD" ]] && [[ -d "''$cwd" ]]; then
+          builtin cd -- "''$cwd"
+        fi
+        rm -f -- "''$tmp"
+      }
     '';
   };
 }
