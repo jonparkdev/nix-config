@@ -40,8 +40,34 @@ flake.nix                           # Entry point: inputs, mkDarwinConfig/mkNixo
   └─> hosts/darwin/work-macbook/     # Host identity: hostname, user
         ├─> modules/shared/          # Cross-platform: nix daemon, gc, experimental features
         ├─> modules/darwin/          # macOS: shared settings + role-based packages/casks
-        └─> home/                    # User env: shell, git, ssh, dev tools
+        └─> home/                    # User env: shell, git, ssh, AI CLI config, dev tools
 ```
+
+### Directory Responsibilities
+
+Use this map when deciding where changes belong:
+
+- `hosts/`: machine identity and module composition only. Keep package lists and policy out of host files.
+- `modules/shared/`: platform-agnostic Nix behavior (`nix.*`, cache settings, GC, feature flags).
+- `modules/darwin/`: macOS system behavior and shared Darwin packages/casks.
+- `modules/darwin/roles/`: minimal role deltas (`personal`/`work`) layered on top of shared Darwin modules.
+- `modules/nixos/`: placeholder for future Linux-specific modules; do not put active Darwin logic here.
+- `home/base/`: user defaults that should apply everywhere (shell/git/ssh/AI CLI settings).
+- `home/profiles/`: reusable user contexts selected per host via `homeProfiles`.
+- `home/hosts/`: narrow host-only user overrides.
+
+Roles vs profiles:
+
+- Darwin roles (`modules/darwin/roles/*.nix`) are machine-level deltas.
+- Home profiles (`home/profiles/*.nix`) are user-level composition bundles.
+- If a change affects system packages/casks or OS behavior, prefer roles.
+- If a change affects user environment composition across hosts, prefer profiles.
+
+Escalation rule for placement:
+
+1. Start specific (role/host).
+2. Promote to shared only when at least two hosts or roles need the same behavior.
+3. Keep `flake.nix` focused on wiring and metadata, not concrete settings.
 
 ### Key Design Decisions
 
@@ -50,6 +76,7 @@ flake.nix                           # Entry point: inputs, mkDarwinConfig/mkNixo
 - Darwin uses role-based layering: host identity in `hosts/darwin/<host>/default.nix`, shared Darwin config in `modules/darwin/{apps,homebrew,system}.nix`, host-specific packages in `modules/darwin/roles/{personal,work}.nix`.
 - Home Manager uses a layered layout: `home/base/` (core user defaults), `home/profiles/` (reusable user contexts), and `home/hosts/` (per-host overrides).
 - 1Password integration spans SSH agent (`home/base/ssh.nix`), git signing (`home/base/git.nix`), and Homebrew casks.
+- AI CLI defaults are managed in `home/base/ai.nix` (currently Claude status line settings).
 - `nixpkgs-unstable` is the active package channel.
 
 ## Package Add Workflow (nix-darwin)

@@ -67,7 +67,8 @@ If you are new to Nix, feel free to use this as reference material. If you run i
 │   ├── base/
 │   │   ├── shell.nix
 │   │   ├── git.nix
-│   │   └── ssh.nix
+│   │   ├── ssh.nix
+│   │   └── ai.nix
 │   ├── features/
 │   │   ├── dev.nix
 │   │   └── hammerspoon.nix
@@ -79,6 +80,38 @@ If you are new to Nix, feel free to use this as reference material. If you run i
 │       └── personal-macbook.nix
 └── RUNBOOK.md
 ```
+
+## Why This Structure
+
+This split is intentional so changes stay local and predictable:
+
+- `hosts/`: machine identity only (`hostname`, user wiring, imports). Avoid putting package logic here.
+- `modules/shared/`: Nix core behavior shared across platforms (`nix.*`, GC, substituters, features).
+- `modules/darwin/`: macOS system layer (`system.defaults`, Homebrew, Dock, optional builder).
+- `modules/darwin/roles/`: role-level differences (`personal` vs `work`) without duplicating base config.
+- `modules/nixos/`: reserved for future Linux hosts so expansion does not require a repo reshape.
+- `home/base/`: user defaults common to all hosts (shell/git/ssh/AI CLI settings).
+- `home/profiles/`: reusable bundles selected per host (`laptop`, `work`, `server-admin`).
+- `home/hosts/`: last-mile host overrides when a profile is too broad.
+
+A quick rule of thumb: if a change applies to many machines, move it "up" (shared/base/profile). If it applies to one machine, keep it "down" (role/host).
+
+### Roles vs Profiles
+
+This is the most common point of confusion in this repo:
+
+- Darwin roles (`modules/darwin/roles/*.nix`) are system-level machine deltas.
+- Home profiles (`home/profiles/*.nix`) are user-level reusable bundles.
+
+In practice:
+
+- Use a role when you are changing machine behavior (system packages, Homebrew casks, OS-level defaults).
+- Use a profile when you are changing user environment composition and want mix-and-match bundles per host.
+
+Examples from this repo:
+
+- `role = "work"` adds work machine deltas like `slack` and `aws-vpn-client`.
+- `homeProfiles = ["laptop" "work"]` composes user-level contexts for that host.
 
 ## Getting Started
 
