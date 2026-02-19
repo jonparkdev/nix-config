@@ -11,108 +11,92 @@
 
 <p align="center">Welcome to my Nix configuration!</p>
 
-## How I Work
+## Overview
 
-My daily driver is a MacBook Pro running macOS with [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager) managing the entire system declaratively. I use [Lix](https://lix.systems/) as my Nix implementation, though nothing here is Lix-specific — standard Nix works fine.
+This repo is my "learn Nix in public" project.
 
-My work is mostly cloud-native — Kubernetes, AWS, Terraform — so the tooling reflects that.
+I use it every day to manage my macOS machines with `nix-darwin` + `home-manager`, and I keep it intentionally readable so other people learning Nix can copy patterns (or avoid mistakes) without digging through a giant abstraction maze.
 
-For package management, CLI tools come from Nix and GUI apps that need proper macOS integration (1Password, Firefox, VPN clients) come from Homebrew via [nix-homebrew](https://github.com/zhaofengli-wip/nix-homebrew). The line is simple: if it lives in your terminal, Nix manages it. If it lives in your Dock, Homebrew probably does.
+I am not trying to present this as "the perfect Nix setup." I am trying to build a setup I understand, improve it over time, and document what I learn.
 
-I'm still learning Nix — the learning curve is no joke. This repo is a record of that journey. As I get more comfortable, I hope it becomes something others can reference. If nothing else, reading other people's configs was the single most useful thing when I was starting out, so maybe this one helps someone too.
+If you are new to Nix, feel free to use this as reference material. If you run it as-is, you will get my machine defaults, so fork first and make it yours.
 
-> This is my personal configuration. If you run it as-is, you'll get *my* machine. Fork it and make it yours, or just use it as a reference.
+## Current Scope
 
-## What's In Here
+- Platform in active use: macOS (`aarch64-darwin`)
+- Hosts:
+1. `personal-macbook`
+2. `work-macbook`
+- NixOS: scaffold exists (`modules/nixos/`) but no active hosts yet
+- Nix implementation: [Lix](https://lix.systems/) (standard Nix works too)
 
-- **System packages**: Docker, kubectl, helm, k9s, AWS CLI, tenv, vim, Obsidian, Zed, and more
-- **Homebrew casks**: 1Password, Firefox, Claude, Codex, Hammerspoon, AWS VPN Client, ProtonVPN
-- **Shell**: Zsh with Starship prompt, distro-aware icons, kube context display
-- **Git**: Commit signing via 1Password SSH agent, LFS, rebase-on-pull
-- **macOS preferences**: Touch ID for sudo, keyboard repeat tuning, three-finger drag, Dock layout
-- **Dev tools**: VS Code with JetBrains Mono Nerd Font, AWS Granted for role switching
+## Philosophy
 
-## Structure
+- Learn by building and using the config daily.
+- Keep modules boring and explicit over clever.
+- Prefer Nix for CLI tooling.
+- Prefer Homebrew casks for GUI apps that integrate better with macOS.
+- Keep role-specific customization minimal (`personal` vs `work`).
 
-```
+## Repository Layout
+
+```text
 .
-├── flake.nix                      # Entry point — inputs, helper functions, host definitions
+├── flake.nix
 ├── hosts/
 │   └── darwin/
-│       ├── personal-macbook/
-│       │   └── default.nix        # Personal host identity (hostname, user)
-│       └── work-macbook/
-│           └── default.nix        # Work host identity (hostname, user)
+│       ├── personal-macbook/default.nix
+│       └── work-macbook/default.nix
 ├── modules/
 │   ├── shared/
-│   │   ├── default.nix
-│   │   └── nix-core.nix          # Nix daemon, garbage collection, experimental features
+│   │   └── nix-core.nix
 │   ├── darwin/
 │   │   ├── default.nix
-│   │   ├── apps.nix              # Shared system packages (Nix)
-│   │   ├── homebrew.nix          # Shared Homebrew config and common casks
-│   │   ├── system.nix            # macOS system preferences
-│   │   ├── dock/common.nix       # Shared Dock layout
+│   │   ├── system.nix
+│   │   ├── apps.nix
+│   │   ├── homebrew.nix
+│   │   ├── dock.nix
+│   │   ├── builders.nix
 │   │   └── roles/
-│   │       ├── personal.nix      # Personal-only packages/casks
-│   │       └── work.nix          # Work-only packages/casks
+│   │       ├── personal.nix
+│   │       └── work.nix
 │   └── nixos/
-│       └── default.nix           # Placeholder for future NixOS hosts
-└── home/
-    ├── default.nix
-    ├── base/
-    │   ├── shell.nix              # Zsh, Starship
-    │   ├── git.nix                # Git config, 1Password signing
-    │   └── ssh.nix                # 1Password SSH agent
-    ├── features/
-    │   ├── dev.nix                # VS Code, Granted
-    │   └── hammerspoon.nix        # Window management hotkeys
-    ├── profiles/
-    │   ├── laptop.nix
-    │   ├── work.nix
-    │   └── server-admin.nix
-    └── hosts/
-        └── personal-macbook.nix   # Host-only home-manager override
+│       └── default.nix
+├── home/
+│   ├── default.nix
+│   ├── base/
+│   │   ├── shell.nix
+│   │   ├── git.nix
+│   │   └── ssh.nix
+│   ├── features/
+│   │   ├── dev.nix
+│   │   └── hammerspoon.nix
+│   ├── profiles/
+│   │   ├── laptop.nix
+│   │   ├── server-admin.nix
+│   │   └── work.nix
+│   └── hosts/
+│       └── personal-macbook.nix
+└── RUNBOOK.md
 ```
-
-The architecture is layered: `flake.nix` defines helper functions (`mkDarwinConfig`, `mkNixosConfig`) that wire together host identity, shared modules, role modules, and home-manager. Adding a new host means creating a directory under `hosts/` and adding host metadata (system/role/flags) in `flake.nix`.
-
-## Host Model
-
-This config uses a 3-layer model for host management:
-
-- **Host**: machine identity (`hostname`, `system`, primary user)
-- **Role**: default package/profile grouping (for example `personal` vs `work`)
-- **Home profiles**: reusable user-level bundles selected per host
-- **Feature flags**: optional system capabilities toggled per host
-
-Why this split:
-
-- Hostnames can change; behavior should not depend on string comparisons.
-- Roles capture broad system defaults you want to reuse across similar machines.
-- Home profiles let one user setup span many machines without copy/paste.
-- Flags let you opt in to system behavior without creating a new role.
-
-Current examples:
-
-- `personal-macbook`: `role = "personal"`, `homeProfiles = ["laptop" "server-admin"]`, `enableLinuxBuilder = true`
-- `work-macbook`: `role = "work"`, `homeProfiles = ["laptop" "work"]`, `enableLinuxBuilder = false`
 
 ## Getting Started
 
-### Install Nix
+### 1. Install Nix
 
-With [Lix](https://lix.systems/) (what I use):
+With Lix (what I use):
+
 ```bash
 curl -sSf -L https://install.lix.systems/lix | sh -s -- install
 ```
 
 Or standard Nix:
+
 ```bash
 sh <(curl -L https://nixos.org/nix/install)
 ```
 
-### Build
+### 2. Clone and apply
 
 ```bash
 git clone https://github.com/jonparkdev/nix-config.git ~/nix-config
@@ -120,16 +104,42 @@ cd ~/nix-config
 sudo nix run nix-darwin -- switch --flake .
 ```
 
-After the initial build, rebuild with:
+### 3. Rebuild for a host
+
 ```bash
 sudo darwin-rebuild switch --flake .#personal-macbook
 # or
 sudo darwin-rebuild switch --flake .#work-macbook
 ```
 
-## References
+## Daily Workflow
 
-Configs I've learned from:
+```bash
+# Validate flake outputs/evaluation
+nix flake check
+
+# Update inputs
+nix flake update
+
+# Format nix files
+nixfmt .
+
+# Clean old generations + unreachable store paths
+nix-collect-garbage -d
+```
+
+For builder troubleshooting and operational notes, read `RUNBOOK.md` first.
+
+## What This Repo Optimizes For
+
+- Reproducible local setup
+- Fast rebuild loop on macOS
+- Clear host/role/profile boundaries
+- A public paper trail of what I am learning in Nix
+
+## Reference Repos
+
+These are the configs that most influenced how I think about structure and workflow:
 
 - [dustinlyons/nixos-config](https://github.com/dustinlyons/nixos-config)
 - [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config)
