@@ -4,6 +4,36 @@
   ...
 }:
 {
+  home.packages = with pkgs; [
+    nixfmt
+    vim
+    gnupg
+    bat
+    glow
+    gh
+    bun
+    kubectl
+    kustomize
+    kubernetes-helm
+    awscli2
+    tenv
+    k9s
+  ];
+
+  programs.ghostty = {
+    enable = true;
+    package =
+      if pkgs.stdenv.hostPlatform.system == "aarch64-darwin" && pkgs ? ghostty-bin
+      then pkgs.ghostty-bin
+      else if pkgs ? ghostty
+      then pkgs.ghostty
+      else null;
+    settings = {
+      fullscreen = true;
+      split-divider-color = "#f5a97f";
+    };
+  };
+
   programs.helix = {
     enable = true;
     defaultEditor = true;
@@ -12,6 +42,23 @@
   programs.yazi = {
     enable = true;
     enableZshIntegration = true;
+    plugins = {
+      piper = pkgs.yaziPlugins.piper;
+    };
+    settings = {
+      manager.ratio = [
+        1
+        2
+        5
+      ];
+
+      plugin.prepend_previewers = [
+        {
+          url = "*.md";
+          run = "piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark \"$1\"";
+        }
+      ];
+    };
   };
 
   programs.starship = {
@@ -69,17 +116,6 @@
         ICON=""
       fi
       export STARSHIP_DISTRO="$ICON"
-
-      # Yazi shell wrapper - allows changing directory on exit
-      function y() {
-        local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-        command yazi "''$@" --cwd-file="''$tmp"
-        IFS= read -r -d "" cwd < "''$tmp"
-        if [[ -n "''$cwd" ]] && [[ "''$cwd" != "''$PWD" ]] && [[ -d "''$cwd" ]]; then
-          builtin cd -- "''$cwd"
-        fi
-        rm -f -- "''$tmp"
-      }
     '';
   };
 }
