@@ -18,6 +18,7 @@
 
     # Core dev tools
     gh
+    bun
 
     # AI/CLI tools
     claude-code
