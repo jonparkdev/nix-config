@@ -62,6 +62,7 @@ Roles vs profiles:
 - Home profiles (`home/profiles/*.nix`) are user-level composition bundles.
 - If a change affects system packages/casks or OS behavior, prefer roles.
 - If a change affects user environment composition across hosts, prefer profiles.
+- For package placement, prefer Home Manager (`home.packages`) for user CLI tools and `modules/darwin/apps.nix` for machine-level runtimes/apps.
 
 Escalation rule for placement:
 
@@ -86,9 +87,10 @@ When the user asks to add a package:
 1. Check **both** nixpkgs (unstable) and Homebrew (formula/cask) for availability.
 2. If only one has the package, use that package manager.
 3. If both have it, compare versions and ask the user which manager/version to use.
-4. Prefer **Nix** for CLI tools. Prefer **Homebrew casks** for GUI apps unless Nix is the only option.
+4. Prefer **Nix** for CLI tools and place them in Home Manager (`home.packages`) when they are user-level tools. Prefer **Homebrew casks** for GUI apps unless Nix is the only option.
 5. Apply changes:
-   - Nix packages → `modules/darwin/apps.nix` (place in the relevant section).
+   - User-level Nix CLI packages → `home/base/*.nix` via `home.packages`.
+   - Machine-level Nix packages/runtime tooling → `modules/darwin/apps.nix`.
    - Homebrew casks → `modules/darwin/homebrew.nix` under `homebrew.casks`.
    - Homebrew CLI formulae (if chosen) → add `homebrew.brews` in `modules/darwin/homebrew.nix` if it doesn’t exist.
 6. After edits, ask for confirmation, then run:

@@ -96,6 +96,15 @@ This split is intentional so changes stay local and predictable:
 
 A quick rule of thumb: if a change applies to many machines, move it "up" (shared/base/profile). If it applies to one machine, keep it "down" (role/host).
 
+### Package Placement Policy
+
+- Put user-facing CLI tools in Home Manager (`home/base/*` via `home.packages`) for cross-platform reuse.
+- Put machine-level apps/runtimes in nix-darwin (`modules/darwin/apps.nix`) when they integrate with OS-level behavior.
+- Keep Homebrew casks in `modules/darwin/homebrew.nix` for GUI macOS apps.
+
+Machine-level examples: `colima`, `docker`, `docker-compose`, fonts, and GUI apps.
+User-level examples: `gh`, `kubectl`, `k9s`, `glow`, `nixfmt`.
+
 ### Roles vs Profiles
 
 This is the most common point of confusion in this repo:
