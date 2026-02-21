@@ -43,19 +43,55 @@
     enable = true;
     enableZshIntegration = true;
     plugins = {
-      piper = pkgs.yaziPlugins.piper;
+      faster-piper = pkgs.fetchFromGitHub {
+        owner = "alberti42";
+        repo = "faster-piper.yazi";
+        rev = "main";
+        sha256 = "sha256-m6ZiwA36lcdZORK3KIz4Xq3bs7mmtC6j62B/+BuDGAQ=";
+      };
+      toggle-pane = pkgs.yaziPlugins.toggle-pane;
+      full-border = pkgs.yaziPlugins.full-border;
+    };
+    initLua = ''
+      require("full-border"):setup {
+        type = ui.Border.ROUNDED,
+      }
+    '';
+    keymap = {
+      mgr.prepend_keymap = [
+        {
+          on = "T";
+          run = "plugin toggle-pane max-preview";
+          desc = "Maximize or restore the preview pane";
+        }
+        {
+          on = "<C-k>";
+          run = "seek -20";
+          desc = "Seek half page up";
+        }
+        {
+          on = "<C-j>";
+          run = "seek 20";
+          desc = "Seek half page down";
+        }
+      ];
     };
     settings = {
-      manager.ratio = [
+      mgr.ratio = [
         1
         2
         5
       ];
 
+      preview = {
+        max_width = 1000;
+        max_height = 1000;
+      };
+
       plugin.prepend_previewers = [
         {
           url = "*.md";
-          run = "piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark \"$1\"";
+          run = "faster-piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dracula \"$1\"";
         }
       ];
     };
