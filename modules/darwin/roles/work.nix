@@ -11,6 +11,7 @@
   homebrew = {
     casks = [
       "aws-vpn-client"
+      "notion"
     ];
   };
 }
