@@ -37,6 +37,9 @@
   programs.helix = {
     enable = true;
     defaultEditor = true;
+    settings = {
+      theme = "github_dark";
+    };
   };
 
   programs.yazi = {
@@ -76,25 +79,49 @@
         }
       ];
     };
-    settings = {
-      mgr.ratio = [
-        1
-        2
-        5
-      ];
+    settings =
+      {
+        mgr.ratio = [
+          1
+          2
+          5
+        ];
 
-      preview = {
-        max_width = 1000;
-        max_height = 1000;
+        preview = {
+          max_width = 1000;
+          max_height = 1000;
+        };
+
+        plugin.prepend_previewers = [
+          {
+            url = "*.md";
+            run = "faster-piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dracula \"$1\"";
+          }
+        ];
+      }
+      // lib.optionalAttrs pkgs.stdenv.isDarwin {
+        opener.typora_fullscreen = [
+          {
+            run = "open -a \"Typora\" %s; osascript -e 'tell application \"Typora\" to activate' -e 'delay 0.2' -e 'tell application \"System Events\" to keystroke \"f\" using {control down, command down}'";
+            orphan = true;
+            desc = "Open Typora Full Screen";
+            for = "macos";
+          }
+        ];
+
+        open.prepend_rules = [
+          {
+            url = "*.md";
+            use = [
+              "open"
+              "edit"
+              "reveal"
+              "exif"
+              "typora_fullscreen"
+            ];
+          }
+        ];
       };
-
-      plugin.prepend_previewers = [
-        {
-          url = "*.md";
-          run = "faster-piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dracula \"$1\"";
-        }
-      ];
-    };
   };
 
   programs.starship = {

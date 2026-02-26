@@ -22,6 +22,7 @@
       "claude"
       "claude-code"
       "firefox"
+      "typora"
       "codex"
       "codex-app"
     ];
