@@ -9,10 +9,6 @@
   ];
 
   homebrew = {
-    brews = [
-      "beads"
-    ];
-
     casks = [
       "hammerspoon"
       "protonvpn"

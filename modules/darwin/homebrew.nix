@@ -5,8 +5,7 @@
   homebrew = {
     enable = true;
 
-    # Avoid noisy uninstall attempts for dependency formulas across role switches.
-    onActivation.cleanup = "none";
+    onActivation.cleanup = "uninstall";
 
     brews = [
       "gemini-cli"
