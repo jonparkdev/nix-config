@@ -8,6 +8,7 @@
     onActivation.cleanup = "uninstall";
 
     brews = [
+      "backlog-md"
       "gemini-cli"
     ];
 

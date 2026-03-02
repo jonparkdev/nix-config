@@ -30,7 +30,6 @@ in
         ./base/shell.nix
         ./base/git.nix
         ./base/ssh.nix
-        ./base/ai.nix
       ]
       ++ builtins.map profileModule homeProfiles
       ++ lib.optionals (builtins.pathExists hostModule) [
