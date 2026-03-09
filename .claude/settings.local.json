@@ -26,7 +26,9 @@
       "Read(//nix/store/b50hcwgxm7zwbg2aayhh7mb4bwb2xdm2-ruler-0.3.35/bin/**)",
       "WebFetch(domain:okigu.com)",
       "WebFetch(domain:medium.com)",
-      "WebFetch(domain:addozhang.medium.com)"
+      "WebFetch(domain:addozhang.medium.com)",
+      "Bash(git push:*)",
+      "Bash(gh api:*)"
     ]
   }
 }
