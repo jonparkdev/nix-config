@@ -21,6 +21,7 @@ in
       planning = ../../ai/ruler/rules/planning.md;
       nix-package-management = ../../ai/ruler/rules/nix-package-management.md;
       skills = ../../ai/ruler/rules/skills.md;
+      plugins = ../../ai/ruler/rules/plugins.md;
     };
     agents = {
       claude = { enable = true; outputPath = ".claude/CLAUDE.md"; };
