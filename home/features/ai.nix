@@ -35,6 +35,7 @@ in
       ${bin} plugin marketplace add ${mp.url} 2>/dev/null || true
       ${lib.concatMapStringsSep "\n" (p: ''
         ${bin} plugin install ${p}@${name} 2>/dev/null || true
+        ${bin} plugin update ${p}@${name} 2>/dev/null || true
         ${bin} plugin enable ${p}@${name} 2>/dev/null || true
       '') mp.plugins}
     '') marketplaces)}
