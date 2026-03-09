@@ -1,6 +1,17 @@
-{ pkgs, claude-code-nix, ... }:
+{ pkgs, lib, claude-code-nix, ... }:
+let
+  claude = claude-code-nix.packages.${pkgs.system}.default;
+  bin = "${claude}/bin/claude";
+
+  marketplaces = {
+    every-marketplace = {
+      url = "https://github.com/EveryInc/compound-engineering-plugin.git";
+      plugins = [ "compound-engineering" ];
+    };
+  };
+in
 {
-  home.packages = [ claude-code-nix.packages.${pkgs.system}.default ];
+  home.packages = [ claude ];
 
   programs.ruler = {
     enable = true;
@@ -17,4 +28,14 @@
       gemini = { enable = true; outputPath = ".gemini/GEMINI.md"; };
     };
   };
+
+  home.activation.claudePlugins = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: mp: ''
+      ${bin} plugin marketplace add ${mp.url} 2>/dev/null || true
+      ${lib.concatMapStringsSep "\n" (p: ''
+        ${bin} plugin install ${p}@${name} 2>/dev/null || true
+        ${bin} plugin enable ${p}@${name} 2>/dev/null || true
+      '') mp.plugins}
+    '') marketplaces)}
+  '';
 }
