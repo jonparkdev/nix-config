@@ -4,7 +4,7 @@ let
   bin = "${claude}/bin/claude";
 
   marketplaces = {
-    every-marketplace = {
+    compound-engineering-plugin = {
       url = "https://github.com/EveryInc/compound-engineering-plugin.git";
       plugins = [ "compound-engineering" ];
     };

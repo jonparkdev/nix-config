@@ -4,11 +4,11 @@ Plugins are managed declaratively in `~/nix-config/home/features/ai.nix` under t
 
 When adding a plugin:
 
-1. Find the marketplace URL and plugin name.
+1. Find the marketplace git URL and plugin name. The marketplace key must match the git repo name (e.g., `compound-engineering-plugin` from the repo URL).
 2. Add or update the entry in `marketplaces`:
    ```nix
    marketplaces = {
-     every-marketplace = {
+     compound-engineering-plugin = {
        url = "https://github.com/EveryInc/compound-engineering-plugin.git";
        plugins = [ "compound-engineering" "new-plugin" ];
      };
