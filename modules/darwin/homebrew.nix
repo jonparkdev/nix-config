@@ -21,11 +21,11 @@
       "1password"
       "1password-cli"
       "claude"
-      "claude-code"
       "firefox"
       "typora"
       "codex"
       "codex-app"
+      "tailscale"
     ];
   };
 }

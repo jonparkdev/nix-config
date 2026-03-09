@@ -32,6 +32,8 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
+
+    claude-code-nix.url = "github:sadjow/claude-code-nix";
   };
 
   outputs =

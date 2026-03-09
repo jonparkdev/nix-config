@@ -12,7 +12,16 @@
       "mcp__acp__Bash",
       "mcp__acp__Write",
       "mcp__acp__Edit",
-      "Bash(nix flake metadata:*)"
+      "Bash(nix flake metadata:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(nix-prefetch-github:*)",
+      "Bash(nix flake prefetch:*)",
+      "Bash(prefetch-npm-deps:*)",
+      "Bash(scutil:*)",
+      "Bash(git -C /Users/jonpark/nix-config add modules/home/ruler.nix home/features/ai.nix home/profiles/laptop.nix home/default.nix flake.nix flake.lock modules/darwin/homebrew.nix ai/ruler/rules/global.md ai/ruler/rules/claude.md ai/skills/ruler/SKILL.md)"
     ]
   }
 }

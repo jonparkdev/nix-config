@@ -3,6 +3,7 @@
   user,
   hostname,
   homeProfiles ? [ ],
+  claude-code-nix,
   ...
 }:
 let
@@ -19,10 +20,11 @@ in
     useGlobalPkgs = true;
     backupFileExtension = "backup";
 
+    extraSpecialArgs = { inherit claude-code-nix; };
+
     sharedModules = [
-      {
-        targets.darwin.linkApps.enable = false;
-      }
+      { targets.darwin.linkApps.enable = false; }
+      (import ../modules/home/ruler.nix)
     ];
 
     users.${user} = {
