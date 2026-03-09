@@ -5,7 +5,7 @@
   programs.ruler = {
     enable = true;
     rules = {
-      general  = ../../ai/ruler/rules/general.md;
+      general  = ../../ai/ruler/rules/AGENTS.md;
       commits  = ../../ai/ruler/rules/commits.md;
       planning = ../../ai/ruler/rules/planning.md;
       nix-package-management = ../../ai/ruler/rules/nix-package-management.md;

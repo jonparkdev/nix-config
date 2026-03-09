@@ -21,7 +21,12 @@
       "Bash(nix flake prefetch:*)",
       "Bash(prefetch-npm-deps:*)",
       "Bash(scutil:*)",
-      "Bash(git -C /Users/jonpark/nix-config add modules/home/ruler.nix home/features/ai.nix home/profiles/laptop.nix home/default.nix flake.nix flake.lock modules/darwin/homebrew.nix ai/ruler/rules/global.md ai/ruler/rules/claude.md ai/skills/ruler/SKILL.md)"
+      "Bash(git -C /Users/jonpark/nix-config add modules/home/ruler.nix home/features/ai.nix home/profiles/laptop.nix home/default.nix flake.nix flake.lock modules/darwin/homebrew.nix ai/ruler/rules/global.md ai/ruler/rules/claude.md ai/skills/ruler/SKILL.md)",
+      "Bash(ruler:*)",
+      "Read(//nix/store/b50hcwgxm7zwbg2aayhh7mb4bwb2xdm2-ruler-0.3.35/bin/**)",
+      "WebFetch(domain:okigu.com)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:addozhang.medium.com)"
     ]
   }
 }
