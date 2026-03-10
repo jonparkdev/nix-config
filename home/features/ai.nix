@@ -28,6 +28,12 @@ in
       codex  = { enable = true; outputPath = ".codex/AGENTS.md"; };
       gemini = { enable = true; outputPath = ".gemini/GEMINI.md"; };
     };
+    mcp = {
+      enable = true;
+      servers = {
+        clickup = { url = "https://mcp.clickup.com/mcp"; };
+      };
+    };
   };
 
   home.activation.claudePlugins = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

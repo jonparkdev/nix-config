@@ -24,12 +24,22 @@ let
 
   tomlFormat = pkgs.formats.toml { };
 
-  rulerToml = tomlFormat.generate "ruler.toml" {
+  mcpServerAttrs = lib.mapAttrs (_: s:
+    lib.optionalAttrs (s.url != null) { inherit (s) url; }
+    // lib.optionalAttrs (s.command != null) { inherit (s) command; }
+    // lib.optionalAttrs (s.args != []) { inherit (s) args; }
+    // lib.optionalAttrs (s.headers != {}) { inherit (s) headers; }
+    // lib.optionalAttrs (s.env != {}) { inherit (s) env; }
+  ) cfg.mcp.servers;
+
+  rulerToml = tomlFormat.generate "ruler.toml" ({
     agents = lib.mapAttrs (_: a: {
       enabled = a.enable;
       output_path = a.outputPath;
     }) cfg.agents;
-  };
+  } // lib.optionalAttrs (cfg.mcp.enable && cfg.mcp.servers != {}) {
+    mcp_servers = mcpServerAttrs;
+  });
 in
 {
   options.programs.ruler = {
@@ -71,6 +81,44 @@ in
       });
       default = { };
       description = "Target agents and where to write their configs.";
+    };
+
+    mcp = {
+      enable = lib.mkEnableOption "MCP server configuration via ruler";
+
+      servers = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule {
+          options = {
+            url = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = "Remote MCP server URL (for HTTP/SSE servers).";
+            };
+            command = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = "Command to run (for stdio servers).";
+            };
+            args = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [];
+              description = "Arguments for the stdio command.";
+            };
+            headers = lib.mkOption {
+              type = lib.types.attrsOf lib.types.str;
+              default = {};
+              description = "HTTP headers (for remote servers).";
+            };
+            env = lib.mkOption {
+              type = lib.types.attrsOf lib.types.str;
+              default = {};
+              description = "Environment variables (for stdio servers).";
+            };
+          };
+        });
+        default = {};
+        description = "MCP servers to distribute to all configured agents.";
+      };
     };
   };
 
