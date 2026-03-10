@@ -28,7 +28,13 @@
       "WebFetch(domain:medium.com)",
       "WebFetch(domain:addozhang.medium.com)",
       "Bash(git push:*)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "Bash(claude plugin:*)",
+      "WebFetch(domain:clickup.com)",
+      "WebFetch(domain:developer.clickup.com)",
+      "WebFetch(domain:help.clickup.com)",
+      "WebFetch(domain:consultevo.com)",
+      "Bash(curl:*)"
     ]
   }
 }
