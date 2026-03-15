@@ -40,10 +40,11 @@ See [reference/decomposition.md](reference/decomposition.md) for the detailed al
 
 ## Phase 3: Sprint Scoping
 
-Size subtasks using fibonacci points:
+Size subtasks using fibonacci points (starting at 0.5):
 
 | Points | Duration |
 |--------|----------|
+| 0.5 | A few hours |
 | 1 | Half day |
 | 2 | 1 day |
 | 3 | 1.5 days |
@@ -52,7 +53,7 @@ Size subtasks using fibonacci points:
 | 13 | Full sprint |
 
 Rules:
-- If an epic totals >13pt, split into multiple sprint-scoped epics.
+- Create a single epic containing all planned tasks, even if total points exceed 20. Do not auto-split into multiple epics. After reviewing the epic, the user will decide whether to split into multiple epics and redistribute tasks.
 - Each epic must have a clear deliverable (demo-able at sprint review).
 - Assign dependency ordering across epics.
 - Target 5-12 subtasks per epic.
