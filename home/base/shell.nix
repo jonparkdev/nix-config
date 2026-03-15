@@ -148,6 +148,10 @@
 
   programs.zsh = {
     enable = true;
+    shellAliases = {
+      cy = "claude --dangerously-skip-permissions";
+      xy = "codex --full-auto";
+    };
     initContent = lib.mkBefore ''
       if [[ "$(uname -s)" == "Linux" ]]; then
         distro=$(awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }')
