@@ -20,6 +20,7 @@ let
       makeWrapper ${pkgs.nodejs}/bin/node $out/bin/ruler \
         --add-flags "$out/lib/ruler/dist/cli/index.js"
     '';
+    meta.mainProgram = "ruler";
   };
 
   tomlFormat = pkgs.formats.toml { };
@@ -60,10 +61,16 @@ in
     rules = lib.mkOption {
       type = lib.types.attrsOf lib.types.path;
       default = { };
-      description = "Rule source files. Attrset of name → path; written to ~/.config/ruler/<name>.md.";
+      description = "Rule source files. Attrset of name → path; written to ~/.ruler/<name>.md.";
       example = lib.literalExpression ''
         { global = ./rules/global.md; claude = ./rules/claude.md; }
       '';
+    };
+
+    skillsDir = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = "Path to skills directory. Symlinked to ~/.ruler/skills/ for ruler to propagate to agents.";
     };
 
     agents = lib.mkOption {
@@ -126,16 +133,21 @@ in
     home.packages = [ cfg.package ];
 
     home.file = lib.mapAttrs' (name: src:
-      lib.nameValuePair ".config/ruler/${name}.md" { source = src; }
+      lib.nameValuePair ".ruler/${name}.md" { source = src; }
     ) cfg.rules // {
-      ".config/ruler/ruler.toml".source = rulerToml;
+      ".ruler/ruler.toml".source = rulerToml;
+    } // lib.optionalAttrs (cfg.skillsDir != null) {
+      ".ruler/skills" = {
+        source = cfg.skillsDir;
+        recursive = true;
+      };
     };
 
     home.activation.rulerApply = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       $VERBOSE_ECHO "Applying ruler config to AI agents"
       ${lib.getExe cfg.package} apply \
         --project-root ${lib.escapeShellArg cfg.projectRoot} \
-        --config ${config.home.homeDirectory}/.config/ruler/ruler.toml \
+        --config ${config.home.homeDirectory}/.ruler/ruler.toml \
         --no-backup \
         --no-gitignore
     '';
