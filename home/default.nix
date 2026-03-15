@@ -4,6 +4,8 @@
   hostname,
   homeProfiles ? [ ],
   claude-code-nix,
+  codex-cli-nix,
+  gemini-cli-nix,
   ...
 }:
 let
@@ -20,7 +22,7 @@ in
     useGlobalPkgs = true;
     backupFileExtension = "backup";
 
-    extraSpecialArgs = { inherit claude-code-nix; };
+    extraSpecialArgs = { inherit claude-code-nix codex-cli-nix gemini-cli-nix; };
 
     sharedModules = [
       { targets.darwin.linkApps.enable = false; }

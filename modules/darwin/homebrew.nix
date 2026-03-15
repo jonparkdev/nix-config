@@ -9,7 +9,6 @@
 
     brews = [
       "backlog-md"
-      "gemini-cli"
     ];
 
     taps = [
@@ -23,9 +22,7 @@
       "claude"
       "firefox"
       "typora"
-      "codex"
-      "codex-app"
-      "tailscale"
+      "tailscale-app"
     ];
   };
 }

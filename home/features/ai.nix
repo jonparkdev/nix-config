@@ -1,6 +1,8 @@
-{ pkgs, lib, claude-code-nix, ... }:
+{ pkgs, lib, claude-code-nix, codex-cli-nix, gemini-cli-nix, ... }:
 let
   claude = claude-code-nix.packages.${pkgs.system}.default;
+  codex = codex-cli-nix.packages.${pkgs.system}.default;
+  gemini = gemini-cli-nix.packages.${pkgs.system}.default;
   bin = "${claude}/bin/claude";
 
   marketplaces = {
@@ -11,7 +13,7 @@ let
   };
 in
 {
-  home.packages = [ claude ];
+  home.packages = [ claude codex gemini ];
 
   programs.ruler = {
     enable = true;
@@ -23,6 +25,7 @@ in
       skills = ../../ai/ruler/rules/skills.md;
       plugins = ../../ai/ruler/rules/plugins.md;
     };
+    skillsDir = ../../ai/skills;
     agents = {
       claude = { enable = true; outputPath = ".claude/CLAUDE.md"; };
       codex  = { enable = true; outputPath = ".codex/AGENTS.md"; };
