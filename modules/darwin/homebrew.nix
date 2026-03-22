@@ -5,6 +5,8 @@
   homebrew = {
     enable = true;
 
+    onActivation.autoUpdate = true;
+    onActivation.upgrade = true;
     onActivation.cleanup = "uninstall";
 
     brews = [
