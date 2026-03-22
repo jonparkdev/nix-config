@@ -1,11 +1,7 @@
 ---
 name: plan-to-clickup
-description: >
-  Decompose a CE plan into sprint-scoped ClickUp epics with subtasks.
-  Surfaces hidden work through recursive drill-down. Use when the user
-  says "sync to clickup", "decompose this plan", "create epics",
-  "sprint plan this", or has a plan doc ready for execution.
-argument-hint: [path-to-plan] [clickup-list-id]
+description: "Decompose a CE plan into sprint-scoped ClickUp epics with subtasks. Surfaces hidden work through recursive drill-down. Use when the user says 'sync to clickup', 'decompose this plan', 'create epics', 'sprint plan this', or has a plan doc ready for execution."
+argument-hint: "<path-to-plan> <clickup-list-id>"
 disable-model-invocation: true
 ---
 
