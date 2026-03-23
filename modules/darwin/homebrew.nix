@@ -23,6 +23,7 @@
       "1password-cli"
       "claude"
       "firefox"
+      "google-chrome"
       "typora"
       "tailscale-app"
     ];
