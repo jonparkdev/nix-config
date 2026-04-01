@@ -20,6 +20,7 @@
       pull.rebase = true;
       rebase.autoStash = true;
       merge.conflictStyle = "zdiff3";
+      url."git@github.com:".insteadOf = "https://github.com/";
       alias = {
         # common aliases
         br = "branch";
