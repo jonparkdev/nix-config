@@ -151,6 +151,7 @@
     shellAliases = {
       cy = "claude --dangerously-skip-permissions";
       xy = "codex --full-auto";
+      rebuild = "sudo darwin-rebuild switch --flake ~/nix-config#$(scutil --get LocalHostName)";
     };
     initContent = lib.mkBefore ''
       if [[ "$(uname -s)" == "Linux" ]]; then

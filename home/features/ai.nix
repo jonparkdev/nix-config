@@ -1,8 +1,7 @@
-{ pkgs, lib, claude-code-nix, codex-cli-nix, gemini-cli-nix, ... }:
+{ pkgs, lib, claude-code-nix, codex-cli-nix, ... }:
 let
   claude = claude-code-nix.packages.${pkgs.system}.default;
   codex = codex-cli-nix.packages.${pkgs.system}.default;
-  gemini = gemini-cli-nix.packages.${pkgs.system}.default;
   bin = "${claude}/bin/claude";
 
   marketplaces = {
@@ -13,7 +12,7 @@ let
   };
 in
 {
-  home.packages = [ claude codex gemini ];
+  home.packages = [ claude codex ];
 
   programs.ruler = {
     enable = true;
