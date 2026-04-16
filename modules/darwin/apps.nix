@@ -13,5 +13,8 @@
     colima
     docker
     docker-compose
+
+    # AWS
+    ssm-session-manager-plugin
   ];
 }
