@@ -19,22 +19,15 @@ in
     rules = {
       general  = ../../ai/ruler/rules/AGENTS.md;
       commits  = ../../ai/ruler/rules/commits.md;
-      planning = ../../ai/ruler/rules/planning.md;
       nix-package-management = ../../ai/ruler/rules/nix-package-management.md;
       skills = ../../ai/ruler/rules/skills.md;
       plugins = ../../ai/ruler/rules/plugins.md;
-    };
+    }; 
     skillsDir = ../../ai/skills;
     agents = {
       claude = { enable = true; outputPath = ".claude/CLAUDE.md"; };
       codex  = { enable = true; outputPath = ".codex/AGENTS.md"; };
       gemini = { enable = true; outputPath = ".gemini/GEMINI.md"; };
-    };
-    mcp = {
-      enable = true;
-      servers = {
-        clickup = { url = "https://mcp.clickup.com/mcp"; };
-      };
     };
   };
 
