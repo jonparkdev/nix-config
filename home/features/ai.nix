@@ -14,23 +14,6 @@ in
 {
   home.packages = [ claude codex ];
 
-  programs.ruler = {
-    enable = true;
-    rules = {
-      general  = ../../ai/ruler/rules/AGENTS.md;
-      commits  = ../../ai/ruler/rules/commits.md;
-      nix-package-management = ../../ai/ruler/rules/nix-package-management.md;
-      skills = ../../ai/ruler/rules/skills.md;
-      plugins = ../../ai/ruler/rules/plugins.md;
-    }; 
-    skillsDir = ../../ai/skills;
-    agents = {
-      claude = { enable = true; outputPath = ".claude/CLAUDE.md"; };
-      codex  = { enable = true; outputPath = ".codex/AGENTS.md"; };
-      gemini = { enable = true; outputPath = ".gemini/GEMINI.md"; };
-    };
-  };
-
   home.activation.claudePlugins = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: mp: ''
       ${bin} plugin marketplace add ${mp.url} 2>/dev/null || true

@@ -1,6 +1,6 @@
 <h2 align="center">nix-config</h2>
 
-<p align="center">Declarative macOS setup with nix-darwin, home-manager, and ruler.</p>
+<p align="center">Declarative macOS setup with nix-darwin and home-manager.</p>
 
 <p align="center">
   <a href="https://lix.systems/">
@@ -81,8 +81,7 @@ sudo darwin-rebuild switch --flake .#work-macbook
 │   │   ├── dock.nix                    # Dock layout
 │   │   ├── builders.nix                # Remote/Linux builders
 │   │   └── roles/                      # Machine-level deltas (personal, work)
-│   ├── nixos/                          # Reserved for future Linux hosts
-│   └── home/ruler.nix                  # Home-manager module for ruler
+│   └── nixos/                          # Reserved for future Linux hosts
 ├── home/
 │   ├── default.nix                     # Home-manager wiring + profile composition
 │   ├── base/                           # User defaults for all hosts (shell, git, ssh)
@@ -90,8 +89,7 @@ sudo darwin-rebuild switch --flake .#work-macbook
 │   ├── profiles/                       # Composable bundles (laptop, work, server-admin)
 │   └── hosts/                          # Last-mile per-host overrides
 ├── ai/
-│   ├── ruler/rules/                    # AI agent rule source files
-│   └── skills/                         # Claude Code skills (ruler, create-readme)
+│   └── skills/                         # Claude Code skills
 └── RUNBOOK.md                          # Operational notes + troubleshooting
 ```
 
@@ -133,21 +131,6 @@ Examples from this repo:
 | `home/base/*` via `home.packages` | User-facing CLI tools (cross-platform reuse) | `gh`, `kubectl`, `k9s`, `nixfmt` |
 | `modules/darwin/apps.nix` | Machine-level apps/runtimes | `colima`, `docker`, fonts |
 | `modules/darwin/homebrew.nix` | GUI macOS apps | Casks via Homebrew |
-
-## AI Agent Configuration
-
-AI agent rules are managed declaratively with [ruler](https://github.com/intellectronica/ruler), which fans a single set of markdown rules to all agents on every rebuild.
-
-```
-ai/ruler/rules/*.md  →  home/features/ai.nix  →  darwin-rebuild  →  ruler apply
-                                                                        ├── ~/.claude/CLAUDE.md
-                                                                        ├── ~/.codex/AGENTS.md
-                                                                        └── ~/.gemini/GEMINI.md
-```
-
-Rules are focused markdown files (`AGENTS.md`, `commits.md`, `planning.md`, `nix-package-management.md`), registered in `home/features/ai.nix` and applied automatically during activation.
-
-Claude Code skills live in `ai/skills/` and are available as slash commands.
 
 ## Daily Workflow
 

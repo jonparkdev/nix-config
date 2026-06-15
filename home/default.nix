@@ -25,7 +25,6 @@ in
 
     sharedModules = [
       { targets.darwin.linkApps.enable = false; }
-      (import ../modules/home/ruler.nix)
     ];
 
     users.${user} = {
