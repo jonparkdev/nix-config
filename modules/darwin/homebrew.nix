@@ -22,6 +22,7 @@
       "1password"
       "1password-cli"
       "claude"
+      "codex-app"
       "firefox"
       "google-chrome"
       "typora"
