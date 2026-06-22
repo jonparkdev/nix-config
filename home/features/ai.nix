@@ -5,9 +5,9 @@ let
   bin = "${claude}/bin/claude";
 
   marketplaces = {
-    compound-engineering-plugin = {
-      url = "https://github.com/EveryInc/compound-engineering-plugin.git";
-      plugins = [ "compound-engineering" ];
+    addy-agent-skills = {
+      url = "https://github.com/addyosmani/agent-skills.git";
+      plugins = [ "agent-skills" ];
     };
   };
 in
